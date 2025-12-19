@@ -1,0 +1,197 @@
+:root {
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-primary: #333333;
+    --text-secondary: #777777;
+    --accent-color: #4facfe;
+    --accent-gradient: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+    --danger-color: #ff6b6b;
+    --success-color: #2ecc71;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.contenedor {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+header h2 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: normal;
+    margin-top: 5px;
+}
+
+/* Card Resumen Total */
+.tarjeta-resumen {
+    background: var(--accent-gradient);
+    color: white;
+    padding: 25px;
+    border-radius: var(--radius);
+    text-align: center;
+    box-shadow: 0 8px 10px rgba(79, 172, 254, 0.2);
+}
+
+.tarjeta-resumen h3 {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.total-grande {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Formulario */
+.seccion-agregar-gasto {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.grupo-input {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.boton-agregar {
+    width: 100%;
+    padding: 12px;
+    background: var(--text-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+}
+
+.boton-agregar:hover {
+    opacity: 0.9;
+}
+
+.boton-agregar:active {
+    transform: scale(0.98);
+}
+
+/* Lista de Gastos */
+.seccion-historial h3 {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    padding-left: 5px;
+}
+
+.lista-gastos {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.elemento-gasto {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+}
+
+.elemento-gasto:hover {
+    transform: translateY(-2px);
+}
+
+.info-gasto {
+    display: flex;
+    flex-direction: column;
+}
+
+.fecha-gasto {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.concepto-gasto {
+    font-weight: 500;
+}
+
+.acciones-gasto {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.monto-gasto {
+    font-weight: bold;
+    color: var(--danger-color);
+}
+
+.boton-eliminar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+.boton-eliminar:hover {
+    opacity: 1;
+}
+
+/* Media query simple */
+@media (min-width: 600px) {
+    .contenedor {
+        max-width: 600px;
+    }
+}

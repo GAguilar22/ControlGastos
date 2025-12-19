@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Despeses Mensuals</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="client.js" defer></script>
+</head>
+
+<body>
+    <div class="contenedor">
+        <header>
+            <h1>Control de Despeses</h1>
+            <h2 id="mes-actual">Carregant mes...</h2>
+        </header>
+
+        <section class="tarjeta-resumen">
+            <h3>Total Gastat</h3>
+            <p id="cantidad-total" class="total-grande">0.00 €</p>
+        </section>
+
+        <section class="seccion-agregar-gasto">
+            <form id="formulario-gasto">
+                <div class="grupo-input">
+                    <input type="text" id="concepto" placeholder="Concepte (ex: Supermercat)" required>
+                </div>
+                <div class="grupo-input">
+                    <input type="number" id="cantidad" placeholder="Quantitat (€)" step="0.01" min="0" required>
+                </div>
+                <button type="submit" class="boton-agregar">Afegir Despesa</button>
+            </form>
+        </section>
+
+        <section class="seccion-historial">
+            <h3>Historial del Mes</h3>
+            <ul id="lista-gastos" class="lista-gastos">
+                <!-- Los gastos se inyectarán aquí dinámicamente -->
+            </ul>
+        </section>
+    </div>
+</body>
+
+</html>
