@@ -1,22 +1,22 @@
 
-// 1. Configuració de Firebase
+// 1. Configuració de Firebase - Modificacio per a Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyDjmZ5MErGHRiUFZGSTnWt5Fe2SDARTO0o",
-  authDomain: "aa1controlgastos.firebaseapp.com",
-  projectId: "aa1controlgastos",
-  storageBucket: "aa1controlgastos.firebasestorage.app",
-  messagingSenderId: "201395356227",
-  appId: "1:201395356227:web:a45c5fbab0c9d7699b0af6",
-  measurementId: "G-ZH0HW6PEF7"
+    apiKey: "AIzaSyDjmZ5MErGHRiUFZGSTnWt5Fe2SDARTO0o",
+    authDomain: "aa1controlgastos.firebaseapp.com",
+    projectId: "aa1controlgastos",
+    storageBucket: "aa1controlgastos.firebasestorage.app",
+    messagingSenderId: "201395356227",
+    appId: "1:201395356227:web:a45c5fbab0c9d7699b0af6",
+    measurementId: "G-ZH0HW6PEF7"
 };
 
-// Inicialitzar Firebase (versió compat)
+// Inicialitzar Firebase (versió compat) - Modificacio per a Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const expensesRef = db.collection("expenses");
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Escuchar cambios en tiempo real en la colección 'expenses'
+    // Escuchar cambios en tiempo real en la colección 'expenses' - Modificacio per a Firebase
     // Esto reemplaza a 'cargarGastos' y se ejecuta automáticamente al añadir/borrar
     expensesRef.onSnapshot((snapshot) => {
         const gastos = [];
@@ -45,8 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
+            // Modificacio per a Firebase: Ús de .add() en lloc de fetch()
             await expensesRef.add(nuevaDespesa);
-            
+
             // Limpiar formulario (la lista se actualiza sola gracias al onSnapshot)
             inputConcepto.value = '';
             inputCantidad.value = '';
@@ -109,11 +110,12 @@ function renderizarGastos(gastos) {
     elementoTotal.textContent = `${total.toFixed(2)} €`;
 }
 
-// Función global para borrar gasto
-window.borrarGasto = async function(id) {
+// Función global para borrar gasto - Modificacio per a Firebase
+window.borrarGasto = async function (id) {
     if (!confirm('Estàs segur d\'esborrar aquesta despesa?')) return;
 
     try {
+        // Modificacio per a Firebase: Ús de .delete() en lloc de fetch()
         await expensesRef.doc(id).delete();
         // No hace falta llamar a nada más, el onSnapshot actualiza la vista
     } catch (error) {
