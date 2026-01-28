@@ -1,5 +1,33 @@
+
+// 1. Configuració de Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDjmZ5MErGHRiUFZGSTnWt5Fe2SDARTO0o",
+  authDomain: "aa1controlgastos.firebaseapp.com",
+  projectId: "aa1controlgastos",
+  storageBucket: "aa1controlgastos.firebasestorage.app",
+  messagingSenderId: "201395356227",
+  appId: "1:201395356227:web:a45c5fbab0c9d7699b0af6",
+  measurementId: "G-ZH0HW6PEF7"
+};
+
+// Inicialitzar Firebase (versió compat)
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const expensesRef = db.collection("expenses");
+
 document.addEventListener('DOMContentLoaded', () => {
-    cargarGastos();
+    // Escuchar cambios en tiempo real en la colección 'expenses'
+    // Esto reemplaza a 'cargarGastos' y se ejecuta automáticamente al añadir/borrar
+    expensesRef.onSnapshot((snapshot) => {
+        const gastos = [];
+        snapshot.forEach((doc) => {
+            gastos.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        renderizarGastos(gastos);
+    });
 
     const formulario = document.getElementById('formulario-gasto');
     formulario.addEventListener('submit', async (e) => {
@@ -10,46 +38,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Uso la fecha de hoy por defecto para el registro interno
         const ahora = new Date();
-        const datosGasto = {
+        const nuevaDespesa = {
             concept: inputConcepto.value,
-            amount: inputCantidad.value,
+            amount: parseFloat(inputCantidad.value),
             date: ahora.toISOString() // Guardamos la fecha completa ISO
         };
 
         try {
-            const respuesta = await fetch('/api/expenses', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datosGasto)
-            });
-
-            if (respuesta.ok) {
-                // Limpiar formulario y recargar lista
-                inputConcepto.value = '';
-                inputCantidad.value = '';
-                cargarGastos();
-            } else {
-                console.error('Error al guardar la despesa');
-                alert('Hi ha hagut un error al guardar la despesa.');
-            }
+            await expensesRef.add(nuevaDespesa);
+            
+            // Limpiar formulario (la lista se actualiza sola gracias al onSnapshot)
+            inputConcepto.value = '';
+            inputCantidad.value = '';
         } catch (error) {
-            console.error('Error de xarxa:', error);
+            console.error('Error al guardar la despesa:', error);
+            alert('Hi ha hagut un error al guardar la despesa.');
         }
     });
 });
-
-async function cargarGastos() {
-    try {
-        const respuesta = await fetch('/api/expenses');
-        const gastos = await respuesta.json();
-
-        renderizarGastos(gastos);
-    } catch (error) {
-        console.error('Error carregant despeses:', error);
-    }
-}
 
 function renderizarGastos(gastos) {
     const contenedorLista = document.getElementById('lista-gastos');
@@ -84,7 +90,6 @@ function renderizarGastos(gastos) {
             li.className = 'elemento-gasto';
 
             // Formatear fecha para mostrar día
-            // 'ca-ES' para formato catalán, aunque visualmente será similar "25 dic."
             const dia = fechaGasto.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short' });
 
             li.innerHTML = `
@@ -104,23 +109,15 @@ function renderizarGastos(gastos) {
     elementoTotal.textContent = `${total.toFixed(2)} €`;
 }
 
-async function borrarGasto(id) {
+// Función global para borrar gasto
+window.borrarGasto = async function(id) {
     if (!confirm('Estàs segur d\'esborrar aquesta despesa?')) return;
 
     try {
-        const respuesta = await fetch(`/api/expenses/${id}`, {
-            method: 'DELETE'
-        });
-
-        if (respuesta.ok) {
-            cargarGastos();
-        } else {
-            alert('Error a l\'esborrar la despesa');
-        }
+        await expensesRef.doc(id).delete();
+        // No hace falta llamar a nada más, el onSnapshot actualiza la vista
     } catch (error) {
         console.error('Error eliminant:', error);
+        alert('Error a l\'esborrar la despesa');
     }
-}
-
-// Hacer la función borrarGasto accesible globalmente para el onclick del HTML
-window.borrarGasto = borrarGasto;
+};
