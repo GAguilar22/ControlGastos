@@ -1,5 +1,5 @@
 
-// 1. Configuració de Firebase - Modificacio per a Firebase
+// Modificacio per a Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDjmZ5MErGHRiUFZGSTnWt5Fe2SDARTO0o",
     authDomain: "aa1controlgastos.firebaseapp.com",
@@ -10,14 +10,14 @@ const firebaseConfig = {
     measurementId: "G-ZH0HW6PEF7"
 };
 
-// Inicialitzar Firebase (versió compat) - Modificacio per a Firebase
+//  Modificacio per a Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const expensesRef = db.collection("expenses");
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Escuchar cambios en tiempo real en la colección 'expenses' - Modificacio per a Firebase
-    // Esto reemplaza a 'cargarGastos' y se ejecuta automáticamente al añadir/borrar
+    // Modificacio per a Firebase
+    // Esto modifica el 'cargarGastos' y s'executa automaticament en afegir/esborrar en temps real
     expensesRef.onSnapshot((snapshot) => {
         const gastos = [];
         snapshot.forEach((doc) => {
@@ -36,19 +36,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const inputConcepto = document.getElementById('concepto');
         const inputCantidad = document.getElementById('cantidad');
 
-        // Uso la fecha de hoy por defecto para el registro interno
+        // Data actual
         const ahora = new Date();
         const nuevaDespesa = {
             concept: inputConcepto.value,
             amount: parseFloat(inputCantidad.value),
-            date: ahora.toISOString() // Guardamos la fecha completa ISO
+            date: ahora.toISOString()
         };
 
         try {
-            // Modificacio per a Firebase: Ús de .add() en lloc de fetch()
+            // Modificacio per a Firebase crea nova despesa
             await expensesRef.add(nuevaDespesa);
 
-            // Limpiar formulario (la lista se actualiza sola gracias al onSnapshot)
+
             inputConcepto.value = '';
             inputCantidad.value = '';
         } catch (error) {
@@ -65,24 +65,24 @@ function renderizarGastos(gastos) {
 
     contenedorLista.innerHTML = '';
 
-    // Filtramos para mostrar solo los gastos del mes actual
+    // Filtrar per al mes actual
     const ahora = new Date();
     const mesActual = ahora.getMonth();
     const anyActual = ahora.getFullYear();
 
-    // Nombres de los meses en Catalán
+    // Noms dels mesos en Català
     const nomsMesos = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
     elementoMesActual.textContent = `${nomsMesos[mesActual]} ${anyActual}`;
 
     let total = 0;
 
-    // Ordenamos por fecha descendente (más nuevo arriba)
+    // Ordenar per data
     const gastosOrdenados = gastos.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     gastosOrdenados.forEach(gasto => {
         const fechaGasto = new Date(gasto.date);
 
-        // Solo mostrar si es del mes y año actual
+
         if (fechaGasto.getMonth() === mesActual && fechaGasto.getFullYear() === anyActual) {
 
             total += gasto.amount;
@@ -90,7 +90,7 @@ function renderizarGastos(gastos) {
             const li = document.createElement('li');
             li.className = 'elemento-gasto';
 
-            // Formatear fecha para mostrar día
+            // Mostrem el dia actual
             const dia = fechaGasto.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short' });
 
             li.innerHTML = `
@@ -110,14 +110,12 @@ function renderizarGastos(gastos) {
     elementoTotal.textContent = `${total.toFixed(2)} €`;
 }
 
-// Función global para borrar gasto - Modificacio per a Firebase
+// Modificacio per a Firebase per esborrar despeses
 window.borrarGasto = async function (id) {
     if (!confirm('Estàs segur d\'esborrar aquesta despesa?')) return;
 
     try {
-        // Modificacio per a Firebase: Ús de .delete() en lloc de fetch()
         await expensesRef.doc(id).delete();
-        // No hace falta llamar a nada más, el onSnapshot actualiza la vista
     } catch (error) {
         console.error('Error eliminant:', error);
         alert('Error a l\'esborrar la despesa');
