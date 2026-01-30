@@ -53,9 +53,10 @@ header h2 {
 }
 
 /* Card Resumen Total */
+/* Modificar el color del text */
 .tarjeta-resumen {
     background: var(--accent-gradient);
-    color: red;
+    color: white;
     padding: 25px;
     border-radius: var(--radius);
     text-align: center;
